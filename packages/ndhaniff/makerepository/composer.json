@@ -1,0 +1,31 @@
+{
+    "name": "ndhaniff/makerepository",
+    "description": "This package add make:repository command to your laravel projects",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Ndhaniff",
+            "email": "ndhaniff@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ndhaniff\\MakeRepository\\": "src/"
+        },
+        "classmap": [
+            "src/"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ndhaniff\\MakeRepository\\MakeRepositoryProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
