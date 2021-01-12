@@ -22,12 +22,17 @@ class UserRepository extends BaseRepository
 
     public function getUserFromEmailOrPhone($credentials)
     {
-        return User::when(array_key_exists('email', $credentials), function($q) use ($credentials) {
+        return $this->model->when(array_key_exists('email', $credentials), function($q) use ($credentials) {
             $q
              ->where('email', $credentials['email'])
              ->whereNotNull('email_verified_at');
          }, function ($q) use ($credentials) {
              $q->where('phone', $credentials['phone']);
          })->first();
+    }
+
+    public function whereEmail($email)
+    {
+        return $this->model->where('email', $email)->first();
     }
 }

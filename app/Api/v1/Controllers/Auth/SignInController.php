@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Api\v1\Controllers;
+namespace App\Api\v1\Controllers\Auth;
 
 use App\Repositories\UserRepository;
-use App\Api\v1\Requests\SignInRequest;
+use App\Api\v1\Requests\Auth\SignInRequest;
 use App\Helpers\AppHelper;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Exception\ResourceException;
@@ -29,18 +29,23 @@ class SignInController extends Controller
             if ($request->has('phone')) {
                 $credentials['phone'] = $this->validatePhone($request->only('phone', 'country_code'));
             }
+            
             $user = $this->userRepo->getUserFromEmailOrPhone($credentials);
+            $unauthorizedException = new UnauthorizedHttpException('', __('auth.invalid_credential', ['name' => array_key_exists('phone', $credentials) ? 'phone' : 'email']));
             if (!$user) {
-                throw new UnauthorizedHttpException('', __('auth.invalid_credential', ['name' => array_key_exists('phone', $credentials) ? 'phone' : 'email']));
+                throw $unauthorizedException;
             }
+
             $isCorrectPassword = Hash::check($credentials['password'], $user->password);
             if (!$isCorrectPassword) {
-                throw new UnauthorizedHttpException('', __('auth.invalid_credential', ['name' => array_key_exists('phone', $credentials) ? 'phone' : 'email']));
+                throw $unauthorizedException;
             }
+            
             $token = $user->generateToken();
             if (!$token) {
-                throw new UnauthorizedHttpException('', __('auth.invalid_credential', ['name' => array_key_exists('phone', $credentials) ? 'phone' : 'email']));
+                throw $unauthorizedException;
             }
+            
             return response()->json([
                 'message' => __('auth.success'),
                 'data' => [
@@ -49,7 +54,7 @@ class SignInController extends Controller
                 ],
             ], 200);
         } catch(JWTException $e) {
-            return response()->json(['token_absent'], $e->getStatusCode());
+            return response()->json(['token_absent'], $e->getCode());
         }
     }
 

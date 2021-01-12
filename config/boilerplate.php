@@ -25,5 +25,17 @@ return [
             'country_code' => 'required_with:phone',
             'password' => 'required',
         ]
+    ],
+    'forgot' => [
+        'rules' => [
+            'email' => 'required|email'
+        ]
+    ],
+    'reset_password' => [
+        'rules' => [
+            'email' => 'required|email',
+            'password' => 'required',
+            'otp' => 'required'
+        ]
     ]
 ];

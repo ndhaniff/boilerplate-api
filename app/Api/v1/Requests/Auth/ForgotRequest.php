@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Api\v1\Requests;
+namespace App\Api\v1\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SignInRequest extends FormRequest
+class ForgotRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,6 +23,6 @@ class SignInRequest extends FormRequest
      */
     public function rules()
     {
-        return config('boilerplate.sign_in.rules');
+        return config('boilerplate.forgot.rules');
     }
 }

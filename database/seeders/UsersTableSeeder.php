@@ -23,6 +23,8 @@ class UsersTableSeeder extends Seeder
             'dob' => '1993-01-01',
             'country_code' => 'MY',
             'avatar' => 'https://via.placeholder.com/45x45.png/0099dd?text=ratione',
+            'is_king' => 0,
+            'last_login_at' => now(),
             'email_verified_at' => now(),
             'password' => bcrypt('aaaaaa'), // password
             'remember_token' => Str::random(10),
