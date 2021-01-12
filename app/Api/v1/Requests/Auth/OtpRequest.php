@@ -4,7 +4,7 @@ namespace App\Api\v1\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ForgotRequest extends FormRequest
+class OtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

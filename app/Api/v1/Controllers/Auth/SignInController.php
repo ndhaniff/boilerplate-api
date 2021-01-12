@@ -7,7 +7,6 @@ use App\Api\v1\Requests\Auth\SignInRequest;
 use App\Helpers\AppHelper;
 use App\Http\Controllers\Controller;
 use Dingo\Api\Exception\ResourceException;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Tymon\JWTAuth\Exceptions\JWTException;

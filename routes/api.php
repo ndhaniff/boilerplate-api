@@ -14,18 +14,21 @@ $api->version('v1', function ($api) use ($v1CtrlNamespace) {
         });
         // Guest Routes
         $api->post('signin', 'Auth\SignInController@signin');
-        $api->post('signup', 'Auth\AuthController@signup');
+        $api->post('signup', 'Auth\SignUpController@signup');
 
         // Forgot Password
         $api->group(['prefix' => 'forget'], function (Router $api) {
+            $api->post('/', 'Auth\ForgotController@resetPassword')->name('forget_password');
+        });
+
+        $api->group(['prefix' => 'otp'], function(Router $api) {
             $api->group([
                 'middleware' => ['api.throttle'],
                 'limit' => 1, 'expires' => 0.5
             ], function ($api) {
-                $api->post('otp', 'Auth\ForgotController@getForgotPasswordOtp')->name('forget_password.get_otp');
+                $api->post('/', 'Shared\OtpController@getOtp')->name('opt.get_otp');
             });
-            $api->post('otp/verify', 'Auth\SignUpController@verifyOtp')->name('forget_password.verify_otp');
-            $api->post('/', 'Auth\ForgotController@resetPassword')->name('forget_password');
+            $api->post('/verify', 'Shared\OtpController@verifyOtp')->name('opt.verify_otp');
         });
     });
 });
