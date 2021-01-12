@@ -5,7 +5,16 @@ use Carbon\Carbon;
 return [
 
     'sign_up' => [
-
+        'fields' => [
+            'first_name',
+            'last_name',
+            'email',
+            'password',
+            'phone',
+            'country_code',
+            'dob',
+            'avatar'
+        ],
         'rules' => [
             'first_name' => 'required',
             'last_name' => 'required',

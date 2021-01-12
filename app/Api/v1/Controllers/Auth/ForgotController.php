@@ -11,13 +11,13 @@ use Dingo\Api\Exception\ResourceException;
 
 class ForgotController extends Controller
 {
-    private $helper;
-    private $userRepo;
+    private static $helper;
+    private static $userRepo;
 
     public function __construct(AppHelper $appHelper, UserRepository $userRepo)
     {
-        $this->helper = $appHelper;
-        $this->userRepo = $userRepo;
+        self::$helper = $appHelper;
+        self::$userRepo = $userRepo;
     }
     /**
      * Reset Password
@@ -29,13 +29,13 @@ class ForgotController extends Controller
     {
         $data = $request->all();
 
-        if (!$this->helper->checkOtp($data['email'], $data['otp'])) {
+        if (!self::$helper->checkOtp($data['email'], $data['otp'])) {
             throw new ResourceException(__('auth.signup.invalid_otp'));
         }
 
-        $this->helper->deleteOtp($data['email'], $data['otp']);
+        self::$helper->deleteOtp($data['email'], $data['otp']);
 
-        $user = $this->userRepo->whereEmail($data['email']);
+        $user = self::$userRepo->whereEmail($data['email']);
         $user->password = $data['password'];
         $user->save();
 

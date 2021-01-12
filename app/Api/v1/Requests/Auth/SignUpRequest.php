@@ -13,7 +13,7 @@ class SignUpRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,6 @@ class SignUpRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return config('boilerplate.sign_up.rules');
     }
 }

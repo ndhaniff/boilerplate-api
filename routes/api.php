@@ -15,6 +15,7 @@ $api->version('v1', function ($api) use ($v1CtrlNamespace) {
         // Guest Routes
         $api->post('signin', 'Auth\SignInController@signin');
         $api->post('signup', 'Auth\SignUpController@signup');
+        $api->get('email/verify/{id}/{hash}', 'Auth\SignUpController@verifyEmail')->name('verification.verify');
 
         // Forgot Password
         $api->group(['prefix' => 'forget'], function (Router $api) {

@@ -18,15 +18,15 @@ class OtpController extends Controller
 
     public function __construct(AppHelper $appHelper, UserRepository $userRepo)
     {
-        $this->helper = $appHelper;
-        $this->userRepo = $userRepo;
+        self::$helper = $appHelper;
+        self::$userRepo = $userRepo;
     }
     
     public function getOtp(OtpRequest $request)
     {
         $email = $request->email;
         // Get OTP
-        $otp = $this->helper->getOtp($email, 'signup');
+        $otp = self::$helper->getOtp($email, 'signup');
 
         // Send OTP
         $message = (new OtpMail(['otp' => $otp]));
@@ -42,7 +42,7 @@ class OtpController extends Controller
         $data = $request->all();
 
         // Check valid OTP
-        if (!$this->helper->checkOtp($data['email'], $data['otp'])) {
+        if (!self::$helper->checkOtp($data['email'], $data['otp'])) {
             throw new ResourceException(__('auth.signup.invalid_otp'));
         }
 

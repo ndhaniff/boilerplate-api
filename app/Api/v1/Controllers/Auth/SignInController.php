@@ -13,12 +13,13 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 
 class SignInController extends Controller
 {
-    private $helper;
+    private static $helper;
+    private static $userRepo;
 
     public function __construct(AppHelper $appHelper, UserRepository $userRepo)
     {
-        $this->helper = $appHelper;
-        $this->userRepo = $userRepo;
+        self::$helper = $appHelper;
+        self::$userRepo = $userRepo;
     }
 
     public function signin(SignInRequest $request)
@@ -26,10 +27,10 @@ class SignInController extends Controller
         try {
             $credentials = $request->only(['phone', 'email', 'password']);
             if ($request->has('phone')) {
-                $credentials['phone'] = $this->validatePhone($request->only('phone', 'country_code'));
+                $credentials['phone'] = self::$userRepo::validatePhone($request->only('phone', 'country_code'));
             }
             
-            $user = $this->userRepo->getUserFromEmailOrPhone($credentials);
+            $user = self::$userRepo->getUserFromEmailOrPhone($credentials);
             $unauthorizedException = new UnauthorizedHttpException('', __('auth.invalid_credential', ['name' => array_key_exists('phone', $credentials) ? 'phone' : 'email']));
             if (!$user) {
                 throw $unauthorizedException;
@@ -38,6 +39,12 @@ class SignInController extends Controller
             $isCorrectPassword = Hash::check($credentials['password'], $user->password);
             if (!$isCorrectPassword) {
                 throw $unauthorizedException;
+            }
+
+            if (config('app.email_verification') && !$user->email_verified_at){
+                return response()->json([
+                    'message' => __('auth.verify_first')
+                ], 200);
             }
             
             $token = $user->generateToken();
@@ -54,15 +61,6 @@ class SignInController extends Controller
             ], 200);
         } catch(JWTException $e) {
             return response()->json(['token_absent'], $e->getCode());
-        }
-    }
-
-    public function validatePhone($validateData)
-    {
-        if ($this->helper->validatePhoneNumber($validateData['phone'], $validateData['country_code'])) {
-            return $this->helper->convertPhoneNumber($validateData['phone'], $validateData['country_code']);
-        } else {
-            throw new ResourceException(__('auth.login_failed'), ['phone' => __('auth.invalid_phone')]);
         }
     }
 }
