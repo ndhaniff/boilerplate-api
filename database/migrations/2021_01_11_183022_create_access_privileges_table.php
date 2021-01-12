@@ -20,6 +20,16 @@ class CreateAccessPrivilegesTable extends Migration
             $table->string('description');
             $table->timestamps();
         });
+
+        Schema::create('access_group_privileges', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('access_group_id')->unsigned();
+            $table->foreign('access_group_id')->references('id')->on('access_groups')->onDelete('cascade');
+            $table->integer('access_privilege_id')->unsigned();
+            $table->foreign('access_privilege_id')->references('id')->on('access_privileges')->onDelete('cascade');
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent();
+        });
     }
 
     /**
@@ -30,5 +40,6 @@ class CreateAccessPrivilegesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('access_privileges');
+        Schema::dropIfExists('access_group_privileges');
     }
 }

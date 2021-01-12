@@ -34,3 +34,4 @@ php artisan api:routes
 
 -   Login with phone or email
 -   Forgot Password with Email OTP
+-   Sign up with Email Verification Feature (Optional)
